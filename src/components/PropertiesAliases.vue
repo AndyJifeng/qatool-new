@@ -3,7 +3,7 @@
     :columns="columns"
     :data-source="tableData"
     bordered
-    size="small"
+    size="small" 
     :pagination="pagination"
     ><template
       #filterDropdown="{

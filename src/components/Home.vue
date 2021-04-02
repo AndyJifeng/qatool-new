@@ -697,6 +697,7 @@ const relationData = [];
 const labelCol = { span: 4 };
 const wrapperCol = { span: 14 };
 var knowledgeGraph = "";
+
 export default {
   name: "Home",
   props: {},
@@ -719,7 +720,7 @@ export default {
       verticeFileList: [],
       edgeFileList: [],
       propertyFileList: [],
-
+      
       pagination: {
         pageSize: 6,
       },
