@@ -15,7 +15,7 @@ export default {
   name: "ExportData",
   methods:{
     exportSynonyms(){
-      
+      console.log("111")
     },
     handleExport() {
       var elemIF = document.createElement('iframe')
