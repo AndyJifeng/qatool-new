@@ -14,6 +14,9 @@
 export default {
   name: "ExportData",
   methods:{
+    exportSynonyms(){
+      
+    },
     handleExport() {
       var elemIF = document.createElement('iframe')
       elemIF.src = '/findfile'
