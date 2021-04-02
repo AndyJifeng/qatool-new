@@ -1,17 +1,37 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <router-link to="home"></router-link>
+  </div>
+  <router-view v-slot="{ Component }">
+    <keep-alive>
+      <component :is="Component" v-if="$route.meta.keepAlive">
+        <p>缓存页面</p>
+      </component>
+    </keep-alive>
+    <component :is="Component" v-if="!$route.meta.keepAlive">
+      <p>没有缓存的页面</p>
+    </component>
+  </router-view>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  setup(props, context) {
+    onMounted(() => {
+      console.log(route);
+      console.log(router);
+      console.log(props);
+      console.log(context);
+    });
+    const route = useRoute();
+    const router = useRouter();
+    return {};
+  },
+};
 </script>
 
 <style>
@@ -19,8 +39,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
