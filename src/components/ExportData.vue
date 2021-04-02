@@ -15,7 +15,7 @@ export default {
   name: "ExportData",
   methods:{
     exportSynonyms(){
-      console.log("gitgitgit")
+      console.log("gitgitgitgit")
     },
     handleExport() {
       var elemIF = document.createElement('iframe')
