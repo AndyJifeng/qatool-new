@@ -3,7 +3,9 @@
 * **2021/04/02 更新**
   1. 新增登陆界面。代码出处：https://github.com/Not-have/vue3-ts-login
   2. 将属性表propertiesTable中每一页能显示的行数与屏幕尺寸做适配，确保不溢出
-
+* **2021/04/06 更新**
+  1. 修复了模板全部删除时，无法删除的bug
+*
 
 ## Project setup
 

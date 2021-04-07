@@ -591,17 +591,13 @@
                   v-model:value="relationForm.target_name"
                   placeholder="请选择终点类型"
                 >
-                  <template
+                  <a-select-option
                     v-for="(vertice, index) in vertexlabels"
                     :key="index"
+                    :value="vertice.name"
                   >
-                    <a-select-option
-                      v-if="vertice.name != relationForm.source_name"
-                      :value="vertice.name"
-                    >
-                      {{ vertice.name }}({{ vertice.standardName }})
-                    </a-select-option>
-                  </template>
+                    {{ vertice.name }}({{ vertice.standardName }})
+                  </a-select-option>
                 </a-select>
               </a-form-item>
             </a-form>
@@ -623,7 +619,7 @@ import {
 } from "@ant-design/icons-vue";
 import ExportData from "./ExportData.vue";
 import QuestionTemplate from "./Template";
-import axios from '../utils/request'
+import axios from "../utils/request";
 
 const entityColumns = [
   {
@@ -720,7 +716,7 @@ export default {
       verticeFileList: [],
       edgeFileList: [],
       propertyFileList: [],
-      
+
       pagination: {
         pageSize: 6,
       },
@@ -1050,25 +1046,21 @@ export default {
           entity: entity,
           property: property,
         };
-        axios
-          .post("/insertEntityPropertyLabelTable", data)
-          .then((response) => {
-            if (response.status === 200) {
-              this.entityData.push(entityData);
-              this.$message.success(
-                this.entityForm.entityLabel + "顶点创建成功"
-              );
-              this.entityForm = {
-                entityLabel: "",
-                standardName: "",
-                properties: [],
-              };
-              this.loadGraph();
-              this.insertEntityVision = false;
-            } else {
-              this.$message.error(this.entityForm.entityLabel + "顶点创建失败");
-            }
-          });
+        axios.post("/insertEntityPropertyLabelTable", data).then((response) => {
+          if (response.status === 200) {
+            this.entityData.push(entityData);
+            this.$message.success(this.entityForm.entityLabel + "顶点创建成功");
+            this.entityForm = {
+              entityLabel: "",
+              standardName: "",
+              properties: [],
+            };
+            this.loadGraph();
+            this.insertEntityVision = false;
+          } else {
+            this.$message.error(this.entityForm.entityLabel + "顶点创建失败");
+          }
+        });
       }
     },
     insertRelation() {
@@ -1255,7 +1247,7 @@ export default {
           processData: false,
           data: formData,
           success: (response) => {
-            this.entityFile = []
+            this.entityFile = [];
             for (let i = 0; i < response.name.length; i++)
               this.entityFile.push(response.name[i]);
             this.fileList = [];
@@ -1922,7 +1914,6 @@ export default {
     },
   },
   mounted() {
-
     this.$nextTick(() => {
       this.loadData();
     });

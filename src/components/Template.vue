@@ -31,12 +31,11 @@
             :style="{ fontSize: '10px' }"
             >保存</a
           >
-          <a-popconfirm
-            title="Sure to cancel?"
-            @confirm="cancel(text, record.key, index)"
+           <a
+            @click="cancel(text, record.key, index)"
+            :style="{ fontSize: '10px' }"
+            > 取消</a
           >
-            <a :style="{ fontSize: '10px' }"> 取消</a>
-          </a-popconfirm>
         </span>
         <span v-else>
           <a
@@ -79,7 +78,7 @@
     :style="{
       marginLeft:'20px'
     }"
-    :disabled="tableData.length === 0"
+    :disabled="data.length === 0"
     >保存模板</a-button
   >
   </div>
@@ -173,6 +172,7 @@ export default {
       this.cacheData = this.tableData.map((item) => ({ ...item }));
     },
     onDelete(key) {
+      console.log(key)
       const tableData = [...this.tableData];
       for (var i = 0; i < tableData.length; i++) {
         if (tableData[i].key === key) {
@@ -303,12 +303,9 @@ export default {
     },
     saveTemplate() {
       let data = [];
-      let index;
+      let index = this.index
       var templates = [];
       for (let i = 0; i < this.tableData.length; i++) {
-        // 这里有bug，如果同义模板数量超过10，就不是减1了
-        var key = this.tableData[i].key.substr(0,this.tableData[i].key.length-2);
-        index = this.tableData[i].index;
         templates.push(this.tableData[i].template);
         if (typeof this.tableData[i].children !== "undefined") {
           for (let j = 0; j < this.tableData[i].children.length; j++) {
@@ -317,7 +314,7 @@ export default {
         }
         
       }
-      data.push([key, templates]);
+      data.push([this.key1, templates]);
       if (index == 1) {
         axios
           .post("/insertOneEntityTemplate", data)
@@ -366,7 +363,6 @@ export default {
   },
   mounted() {
     columns.splice(0, columns.length);
-    this.tableData = this.$store.state.templateTableData;
     columns.push(
       {
         title: "模板",
