@@ -424,56 +424,169 @@
             :data="aliasesTableData"
           ></aliases-table>
 
-          <!--单实体模板 级联选择-->
-          <div v-if="singleEntityCascaderVision" :style="{ marginTop: '5%' }">
-            <a-cascader
-              :options="singleEntityOptions"
-              :show-search="{ singleEntityFilter }"
-              placeholder="选择实体/选择属性/问题类型"
-              @change="singleEntityOnChange"
-              :style="{ width: '20%', textAlign: 'left' }"
-            />
+          <!--单实体模板 选择-->
+          <div v-if="singleEntityCascaderVision" :style="{ marginTop: '2%' }">
+            <span>选择实体：</span>
+            <a-select
+              v-model="selectedSingleEntityCascaderEntity"
+              :value="selectedSingleEntityCascaderEntity"
+              style="width: 120px"
+              @select="handleSingleEntityCascaderEntityChange"
+            >
+              <a-select-option
+                v-for="entity in singleEntityCascaderEntity"
+                :key="entity"
+              >
+                {{ entity }}
+              </a-select-option>
+            </a-select>
+            <span :style="{ marginLeft: '20px' }">选择属性：</span>
+            <a-select
+              v-model="selectedSingleEntityCascaderProperty"
+              :value="selectedSingleEntityCascaderProperty"
+              @select="handleSingleEntityCascaderPropertyChange"
+              style="width: 120px"
+            >
+              <a-select-option
+                v-for="property in singleEntityCascaderProperty[
+                  selectedSingleEntityCascaderEntity
+                ]"
+                :key="property"
+                :value="property"
+              >
+                {{ property }}
+              </a-select-option>
+            </a-select>
+            <span :style="{ marginLeft: '20px' }">问题类型：</span>
+            <a-select
+              v-model="selectedQuestionType"
+              :value="selectedQuestionType"
+              @select="handleQuestionTypeChange"
+              style="width: 120px"
+            >
+              <a-select-option
+                v-for="questionType in questionTypes"
+                :key="questionType"
+              >
+                {{ questionType }}
+              </a-select-option>
+            </a-select>
             <a-button
               type="primary"
               :style="{ marginLeft: '20px' }"
               @click="submitOptions"
-              >提交</a-button
+              >生成</a-button
             >
           </div>
 
           <!--单跳模板 级联选择-->
-          <div v-if="singleJumpCascaderVision" :style="{ marginTop: '5%' }">
-            <a-cascader
-              :options="singleJumpOptions"
-              :show-search="{ singleJumpFilter }"
-              placeholder="选择实体/选择关系/选择属性/问题类型"
-              @change="singleJumpOnChange"
-              :style="{ width: '25%', textAlign: 'left' }"
-            />
+          <div v-if="singleJumpCascaderVision" :style="{ marginTop: '2%' }">
+            <span>选择实体1：</span>
+            <a-select
+              v-model="selectedSingleJumpCascaderEntity1"
+              :value="selectedSingleJumpCascaderEntity1"
+              style="width: 120px"
+              @select="handleSingleJumpCascaderEntity1Change"
+            >
+              <a-select-option
+                v-for="entity in singleJumpCascaderEntity1"
+                :key="entity"
+              >
+                {{ entity }}
+              </a-select-option>
+            </a-select>
+            <span :style="{ marginLeft: '20px' }">选择关系：</span>
+            <a-select
+              v-model="selectedSingleJumpCascaderRelation"
+              :value="selectedSingleJumpCascaderRelation"
+              style="width: 120px"
+              @select="handleSingleJumpCascaderRelationChange"
+            >
+              <a-select-option
+                v-for="relation in singleJumpCascaderRelation[selectedSingleJumpCascaderEntity1]"
+                :key="relation"
+                :value="relation"
+              >
+                {{ relation }}
+              </a-select-option>
+            </a-select>
+            <span :style="{ marginLeft: '20px' }">选择关系：</span>
+            <a-select
+              v-model="selectedSingleJumpCascaderEntity2"
+              :value="selectedSingleJumpCascaderEntity2"
+              style="width: 120px"
+              @select="handleSingleJumpCascaderEntity2Change"
+            >
+              <a-select-option
+                v-for="entity2 in singleJumpCascaderEntity2[selectedSingleJumpCascaderRelation]"
+                :key="entity2"
+                :value="entity2"
+              >
+                {{ entity2 }}
+              </a-select-option>
+            </a-select>
+            <span :style="{ marginLeft: '20px' }">选择属性：</span>
+            <a-select
+              v-model="selectedSingleJumpCascaderProperty"
+              :value="selectedSingleJumpCascaderProperty"
+              @select="handleSingleJumpCascaderPropertyChange"
+              style="width: 120px"
+            >
+              <a-select-option
+                v-for="property in singleJumpCascaderProperty[
+                  selectedSingleJumpCascaderEntity2
+                ]"
+                :key="property"
+                :value="property"
+              >
+                {{ property }}
+              </a-select-option>
+            </a-select>
+            <span :style="{ marginLeft: '20px' }">问题类型：</span>
+            <a-select
+              v-model="selectedQuestionType"
+              :value="selectedQuestionType"
+              @select="handleQuestionTypeChange"
+              style="width: 120px"
+            >
+              <a-select-option
+                v-for="questionType in questionTypes"
+                :key="questionType"
+              >
+                {{ questionType }}
+              </a-select-option>
+            </a-select>
             <a-button
               type="primary"
               :style="{ marginLeft: '20px' }"
               @click="submitOptions"
-              >提交</a-button
+              >生成</a-button
             >
           </div>
           <!-- 数据导出 -->
           <export-data v-if="exportDataVision"></export-data>
 
           <!--模板-->
-          <a-modal
+          <div
             v-if="templateVision"
-            v-model:visible="templateVision"
-            :closable="false"
-            width="70%"
-            @ok="templateVision = false"
+            :style="{
+              display: 'inline-block',
+              width: '85%',
+              marginTop: '20px',
+            }"
           >
             <question-template
-              :data="templateTableDataSample"
+              :data="templateTableData"
               :key1="cascaderValue"
               :index="selectdTemplateIndex"
+              :singleEntityCascaderEntity="singleEntityCascaderEntity"
+              :singleEntityCascaderProperty="singleEntityCascaderProperty"
+              :singleJumpCascaderEntity1="singleJumpCascaderEntity1"
+              :singleJumpCascaderRelation="singleJumpCascaderRelation"
+              :singleJumpCascaderEntity2="singleJumpCascaderEntity2"
+              :singleJumpCascaderProperty="singleJumpCascaderProperty"
             ></question-template>
-          </a-modal>
+          </div>
 
           <!--创建实体，关系-->
           <a-modal
@@ -620,7 +733,7 @@ import {
 import ExportData from "./ExportData.vue";
 import QuestionTemplate from "./Template";
 import axios from "../utils/request";
-
+import { url } from '../../dist/config'
 const entityColumns = [
   {
     title: "顶点类型名",
@@ -866,19 +979,35 @@ export default {
           content: "导入数据",
         },
       ],
-      entityTagsLength: 2, // 一开始的length，index在0～（length-1）的tag无法被删除，只有新添加的tag可以被删除
-      entityTags: ["1", "2"],
-      entityInputVisible: false,
-      entityInputValue: "",
       entityFile: [],
       selectedEntityLabel: "",
       selectedEntityFile: "",
       selectedEntityMap: [],
       importDataProgress: 0,
 
-      singleEntityOptions: [], // 单实体模板 级联选择项
-      singleJumpOptions: [], // 单跳模板 级联选择项
-      cascaderValue: "",
+      // 单实体模板级联选择
+      singleEntityCascaderEntity: [],
+      selectedSingleEntityCascaderEntity: "",
+      singleEntityCascaderProperty: {},
+      selectedSingleEntityCascaderProperty: "",
+      // 单跳模板级联选择
+      singleJumpCascaderEntity1: [],
+      selectedSingleJumpCascaderEntity1: "",
+      selectedSingleJumpCascaderEntity2: "",
+      singleJumpCascaderEntity2: {},
+      singleJumpCascaderRelation: {},
+      selectedSingleJumpCascaderRelation: "",
+      singleJumpCascaderProperty: {},
+      selectedSingleJumpCascaderProperty: "",
+      questionTypes: [
+        "查找实体",
+        "查找属性",
+        "比较问题",
+        "统计问题",
+        "判断问题",
+      ],
+      selectedQuestionType: "查找实体",
+
       templateTableDataSample: [],
       selectdTemplateIndex: "",
     };
@@ -1161,7 +1290,7 @@ export default {
           var i = 0;
           this.uploading1 = true;
           reqwest({
-            url: "http://10.1.13.142:18081/hugeGraphInsertHugeVertexLabels",
+            url: url + "/hugeGraph/insertHugeVertexLabels",
             method: "post",
             processData: false,
             data: formData,
@@ -1188,7 +1317,7 @@ export default {
             formData1.append(file.name, file);
           });
           reqwest({
-            url: "http://10.1.13.142:18081/hugeGraph/insertHugeEdgeLabels",
+            url: url + "/hugeGraph/insertHugeEdgeLabels",
             method: "post",
             processData: false,
             data: formData1,
@@ -1213,7 +1342,7 @@ export default {
             formData2.append(file.name, file);
           });
           reqwest({
-            url: "http://10.1.13.142:18081/hugeGraph/insertHugeVertices",
+            url: url + "/hugeGraph/insertHugeVertices",
             method: "post",
             processData: false,
             data: formData2,
@@ -1242,7 +1371,7 @@ export default {
         });
         this.uploading = true;
         reqwest({
-          url: "http://10.1.13.142:18081/relationDatabaseInsertPropertyFile",
+          url: url + "/relationDatabaseInsertPropertyFile",
           method: "post",
           processData: false,
           data: formData,
@@ -1305,7 +1434,7 @@ export default {
     entityFileFilterOption(input, option) {
       return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     },
-    // 保存映射     ***
+    // 保存映射     
     submitEntityMap() {
       for (let i = 0; i < this.selectedEntityMap.length; i++) {
         if (
@@ -1320,14 +1449,13 @@ export default {
         ) {
           this.$message.error("该文件已添加映射");
           return;
-        } else {
-          this.selectedEntityMap.push({
-            selectedEntityLabel: this.selectedEntityLabel,
-            selectedEntityFile: this.selectedEntityFile,
-          });
-          this.$message.success("映射添加成功");
         }
       }
+      this.selectedEntityMap.push({
+        selectedEntityLabel: this.selectedEntityLabel,
+        selectedEntityFile: this.selectedEntityFile,
+      });
+      this.$message.success("映射添加成功");
     },
 
     // 开始数据导入
@@ -1369,67 +1497,59 @@ export default {
       );
     },
     loadSingleEntityOptionsData() {
-      this.singleEntityOptions.splice(0, this.singleEntityOptions.length);
-      for (var i = 0; i < this.vertexlabels.length; i++) {
-        this.singleEntityOptions.push({
-          value: this.vertexlabels[i].name,
-          label: this.vertexlabels[i].name,
-          children: [],
-        });
-        for (let j = 0; j < this.vertexlabels[i].properties.length; j++) {
-          let value = this.vertexlabels[i].properties[j].name;
-          this.singleEntityOptions[i].children.push({
-            value: value,
-            label: value,
-            children: [],
-          });
-          this.singleEntityOptions[i].children[j].children.push({
-            value: "查找实体",
-            label: "查找实体",
-          });
-          this.singleEntityOptions[i].children[j].children.push({
-            value: "查找属性",
-            label: "查找属性",
-          });
-          this.singleEntityOptions[i].children[j].children.push({
-            value: "比较问题",
-            label: "比较问题",
-          });
-          this.singleEntityOptions[i].children[j].children.push({
-            value: "判断问题",
-            label: "判断问题",
-          });
-          this.singleEntityOptions[i].children[j].children.push({
-            value: "计数问题",
-            label: "计数问题",
-          });
-        }
-      }
-    },
-    submitOptions() {
-      this.templateTableDataSample.splice(
-        0,
-        this.templateTableDataSample.length
-      );
-      if (this.selectdTemplateIndex === 1) this.loadSingleEntityTemplate();
-      else if (this.selectdTemplateIndex === 2) this.loadSingleJumpTemplate();
-      var that = this;
-      setTimeout(function () {
-        for (let i = 0; i < that.templateTableData.length; i++) {
-          if (that.templateTableData[i].key === that.cascaderValue) {
-            that.templateTableDataSample.push({
-              index: that.templateTableData[i].index,
-              key:
-                that.templateTableData[i].key +
-                (that.templateTableDataSample.length < 10
-                  ? "0" + that.templateTableDataSample.length
-                  : that.templateTableDataSample.length),
-              template: that.templateTableData[i].template,
-            });
+      if (this.singleEntityCascaderEntity.length === 0) {
+        for (let i = 0; i < this.vertexlabels.length; i++) {
+          let name = this.vertexlabels[i].name;
+          this.singleEntityCascaderEntity.push(name);
+          this.singleEntityCascaderProperty[name] = [];
+          for (let j = 0; j < this.vertexlabels[i].properties.length; j++) {
+            this.singleEntityCascaderProperty[name].push(
+              this.vertexlabels[i].properties[j].name
+            );
           }
         }
-        that.templateVision = true;
-      }, 500);
+        this.selectedSingleEntityCascaderEntity = this.singleEntityCascaderEntity[0];
+        this.selectedSingleEntityCascaderProperty = this.singleEntityCascaderProperty[
+          this.singleEntityCascaderEntity[0]
+        ][0];
+      }
+    },
+    handleSingleEntityCascaderEntityChange(value) {
+      this.selectedSingleEntityCascaderEntity = value;
+      this.selectedSingleEntityCascaderProperty = this.singleEntityCascaderProperty[
+        value
+      ][0];
+    },
+    handleSingleEntityCascaderPropertyChange(value) {
+      this.selectedSingleEntityCascaderProperty = value;
+    },
+    handleQuestionTypeChange(value) {
+      this.selectedQuestionType = value;
+    },
+    submitOptions() {
+      this.templateVision = false;
+      this.$nextTick(() => {
+        if (this.selectdTemplateIndex === 1) {
+          this.cascaderValue =
+            this.selectedSingleEntityCascaderEntity +
+            "-" +
+            this.selectedSingleEntityCascaderProperty +
+            "-" +
+            this.selectedQuestionType;
+        } else if (this.selectdTemplateIndex === 2) {
+          this.cascaderValue =
+            this.selectedSingleJumpCascaderEntity1 +
+            "-" +
+            this.selectedSingleJumpCascaderRelation +
+            "-" +
+            this.selectedSingleJumpCascaderEntity2 +
+            "-" +
+            this.selectedSingleJumpCascaderProperty +
+            "-" +
+            this.selectedQuestionType;
+        }
+        this.templateVision = true;
+      });
     },
 
     // 单跳模板 级联选择方法
@@ -1445,75 +1565,77 @@ export default {
       );
     },
     loadSingleJumpOptionsData() {
-      this.singleJumpOptions.splice(0, this.singleJumpOptions.length);
-      for (var i = 0; i < this.vertexlabels.length; i++) {
-        this.singleJumpOptions.push({
-          value: this.vertexlabels[i].name,
-          label: this.vertexlabels[i].name,
-          children: [],
-        });
-        for (var j = 0; j < this.edgelabels.length; j++) {
-          if (this.edgelabels[j].source_name === this.vertexlabels[i].name) {
-            this.singleJumpOptions[i].children.push({
-              value: this.edgelabels[j].name,
-              label: this.edgelabels[j].name,
-              children: [],
-            });
-            for (var n = 0; n < this.vertexlabels.length; n++) {
-              if (
-                this.vertexlabels[n].name === this.edgelabels[j].target_name
-              ) {
-                for (
-                  var q = 0;
-                  q < this.vertexlabels[n].properties.length;
-                  q++
-                ) {
-                  this.singleJumpOptions[i].children[
-                    this.singleJumpOptions[i].children.length - 1
-                  ].children.push({
-                    value: this.vertexlabels[n].properties[q].name,
-                    label: this.vertexlabels[n].properties[q].name,
-                    children: [],
-                  });
-                  this.singleJumpOptions[i].children[
-                    this.singleJumpOptions[i].children.length - 1
-                  ].children[q].children.push({
-                    value: "查找属性",
-                    label: "查找属性",
-                  });
-                  this.singleJumpOptions[i].children[
-                    this.singleJumpOptions[i].children.length - 1
-                  ].children[q].children.push({
-                    value: "查找实体",
-                    label: "查找实体",
-                  });
-                  this.singleJumpOptions[i].children[
-                    this.singleJumpOptions[i].children.length - 1
-                  ].children[q].children.push({
-                    value: "判断问题",
-                    label: "判断问题",
-                  });
-                  this.singleJumpOptions[i].children[
-                    this.singleJumpOptions[i].children.length - 1
-                  ].children[q].children.push({
-                    value: "比较问题",
-                    label: "比较问题",
-                  });
-                  this.singleJumpOptions[i].children[
-                    this.singleJumpOptions[i].children.length - 1
-                  ].children[q].children.push({
-                    value: "计数问题",
-                    label: "计数问题",
-                  });
+      if (this.singleJumpCascaderEntity1.length === 0) {
+        for (let i = 0; i < this.vertexlabels.length; i++) {
+          let name = this.vertexlabels[i].name;
+          this.singleJumpCascaderEntity1.push(name);  
+          this.singleJumpCascaderRelation[name] = [] 
+          for(let j = 0; j < this.edgelabels.length; j++){
+            if(this.edgelabels[j].source_name === name){
+              this.singleJumpCascaderRelation[name].push(this.edgelabels[j].name)
+              this.singleJumpCascaderEntity2[this.edgelabels[j].name] = [this.edgelabels[j].target_name]
+              // 从vertexlabels找到target_name,获取到属性
+              for(let k = 0; k < this.vertexlabels.length; k++){
+                if(this.vertexlabels[k].name === this.edgelabels[j].target_name){
+                  // 遍历属性
+                  this.singleJumpCascaderProperty[this.edgelabels[j].target_name] = []
+                  for(let q = 0; q < this.vertexlabels[k].properties.length; q++){
+                     this.singleJumpCascaderProperty[this.edgelabels[j].target_name].push( this.vertexlabels[k].properties[q].name)
+                  }
+                  break
                 }
-                break;
               }
             }
           }
+          // 把没有关系的实体删除
+          if(this.singleJumpCascaderRelation[name].length === 0){
+            delete this.singleJumpCascaderRelation[name]
+          }
         }
+        this.selectedSingleJumpCascaderEntity1 = this.singleJumpCascaderEntity1[0];
+        if(typeof(this.singleJumpCascaderRelation[this.selectedSingleJumpCascaderEntity1]) === 'undefined'){
+           this.selectedSingleJumpCascaderEntity2  = ""
+          this.selectedSingleJumpCascaderRelation  = ""
+          this.selectedSingleJumpCascaderProperty = ""
+          return
+       }
+       console.log(this.singleJumpCascaderEntity2)
+       console.log(this.singleJumpCascaderProperty)
+        this.selectedSingleJumpCascaderRelation = this.singleJumpCascaderRelation[this.selectedSingleJumpCascaderEntity1][0];
+        this.selectedSingleJumpCascaderEntity2 = this.singleJumpCascaderEntity2[this.selectedSingleJumpCascaderRelation][0];
+        this.selectedSingleJumpCascaderProperty = this.singleJumpCascaderProperty[this.selectedSingleJumpCascaderEntity2][0]
       }
     },
-
+    handleSingleJumpCascaderEntity1Change(value) {
+      this.selectedSingleJumpCascaderEntity1 = value;
+      if(typeof(this.singleJumpCascaderRelation[value]) !== 'undefined'){
+        this.selectedSingleJumpCascaderRelation = this.singleJumpCascaderRelation[
+          value
+        ][0];
+        this.selectedSingleJumpCascaderEntity2 = this.singleJumpCascaderEntity2[this.selectedSingleJumpCascaderRelation]
+        this.selectedSingleEntityCascaderProperty = this.singleJumpCascaderProperty[this.selectedSingleJumpCascaderEntity2]
+      }
+      else{
+        this.selectedSingleJumpCascaderRelation = ""
+         this.selectedSingleJumpCascaderEntity2 = ""
+        this.selectedSingleJumpCascaderProperty =""
+      }
+    },
+    handleSingleJumpCascaderRelationChange(value) {
+      this.selectedSingleJumpCascaderRelation = value;
+      this.selectedSingleJumpCascaderEntity2= this.singleJumpCascaderEntity2[
+        value
+      ][0];
+    },
+    handleSingleJumpCascaderEntity2Change(value) {
+      this.selectedSingleJumpCascaderEntity2 = value;
+      this.selectedSingleJumpCascaderProperty= this.singleJumpCascaderProperty[
+        value
+      ][0];
+    },
+    handleSingleJumpCascaderPropertyChange(value) {
+      this.selectedSingleJumpCascaderProperty = value;
+    },
     turnToTemplate() {
       // this.$store.commit("pushTemplateTableData", this.templateTableData);
       router.push({
@@ -1522,15 +1644,22 @@ export default {
     },
     loadTemplate(response, index) {
       this.templateTableData.splice(0, this.templateTableData.length);
+      let count = 0;
       for (var i = 0; i < response.data.length; i++) {
         for (var j = 0; j < response.data[i][1].length; j++) {
+          // 给每个模板一个id；id为key+count，限制最大为1000
+          if (count < 10) var id = "-00" + count++;
+          else if (count < 100) id = "-0" + count++;
+          else id = "-" + count++;
           this.templateTableData.push({
-            key: response.data[i][0],
+            key: response.data[i][0] + id,
             template: response.data[i][1][j],
             index: index,
           });
         }
       }
+      this.cascaderValue = "0"; // 0表示还未选择
+      this.templateVision = true;
       //this.turnToTemplate();
     },
     loadSingleEntityTemplate() {
@@ -1579,20 +1708,25 @@ export default {
         this.close();
         return;
       } else if (selectedTitle == "单实体模板") {
+        this.selectdTemplateIndex = 1;
         this.loadSingleEntityOptionsData();
+        this.loadSingleEntityTemplate();
         this.$nextTick(() => {
           this.close();
           this.knowledgeGraphVision = false;
           this.singleEntityCascaderVision = true;
         });
       } else if (selectedTitle == "单跳模板") {
+        this.selectdTemplateIndex = 2;
         this.loadSingleJumpOptionsData();
+        this.loadSingleJumpTemplate()
         this.$nextTick(() => {
           this.close();
           this.knowledgeGraphVision = false;
           this.singleJumpCascaderVision = true;
         });
       } else if (selectedTitle == "多跳模板") {
+        this.selectdTemplateIndex = 3;
         this.close();
         this.$nextTick(() => {
           this.loadMultipleJumpTemplate();
@@ -1810,6 +1944,9 @@ export default {
               categories: categories,
               edgeSymbol: ["circle", "arrow"],
               roam: false,
+              edgeLabel:{
+                show: true
+              },
               label: {
                 show: true,
               },
@@ -1894,15 +2031,15 @@ export default {
         content: "",
         onOk() {
           var elemIF = document.createElement("iframe");
-          elemIF.src = " http://10.1.13.142:18081/entityFile";
+          elemIF.src = url + "/entityFile";
           elemIF.style.display = "none";
           document.body.appendChild(elemIF);
           var elemIF1 = document.createElement("iframe");
-          elemIF1.src = " http://10.1.13.142:18081/dictionaryFile";
+          elemIF1.src = url+"/dictionaryFile";
           elemIF1.style.display = "none";
           document.body.appendChild(elemIF1);
           var elemIF2 = document.createElement("iframe");
-          elemIF2.src = " http://10.1.13.142:18081/templateFile";
+          elemIF2.src = url+"/templateFile";
           elemIF2.style.display = "none";
           document.body.appendChild(elemIF2);
         },
