@@ -510,7 +510,7 @@
                 {{ relation }}
               </a-select-option>
             </a-select>
-            <span :style="{ marginLeft: '20px' }">选择关系：</span>
+            <span :style="{ marginLeft: '20px' }">选择实体2：</span>
             <a-select
               v-model="selectedSingleJumpCascaderEntity2"
               :value="selectedSingleJumpCascaderEntity2"
@@ -733,7 +733,7 @@ import {
 import ExportData from "./ExportData.vue";
 import QuestionTemplate from "./Template";
 import axios from "../utils/request";
-import { url } from '../../dist/config'
+
 const entityColumns = [
   {
     title: "顶点类型名",
@@ -1290,7 +1290,7 @@ export default {
           var i = 0;
           this.uploading1 = true;
           reqwest({
-            url: url + "/hugeGraph/insertHugeVertexLabels",
+            url: config.url + "/hugeGraph/insertHugeVertexLabels",
             method: "post",
             processData: false,
             data: formData,
@@ -1317,7 +1317,7 @@ export default {
             formData1.append(file.name, file);
           });
           reqwest({
-            url: url + "/hugeGraph/insertHugeEdgeLabels",
+            url: config.url + "/hugeGraph/insertHugeEdgeLabels",
             method: "post",
             processData: false,
             data: formData1,
@@ -1342,7 +1342,7 @@ export default {
             formData2.append(file.name, file);
           });
           reqwest({
-            url: url + "/hugeGraph/insertHugeVertices",
+            url: config.url + "/hugeGraph/insertHugeVertices",
             method: "post",
             processData: false,
             data: formData2,
@@ -1371,7 +1371,7 @@ export default {
         });
         this.uploading = true;
         reqwest({
-          url: url + "/relationDatabaseInsertPropertyFile",
+          url: config.url + "/relationDatabaseInsertPropertyFile",
           method: "post",
           processData: false,
           data: formData,
@@ -1612,8 +1612,8 @@ export default {
         this.selectedSingleJumpCascaderRelation = this.singleJumpCascaderRelation[
           value
         ][0];
-        this.selectedSingleJumpCascaderEntity2 = this.singleJumpCascaderEntity2[this.selectedSingleJumpCascaderRelation]
-        this.selectedSingleEntityCascaderProperty = this.singleJumpCascaderProperty[this.selectedSingleJumpCascaderEntity2]
+        this.selectedSingleJumpCascaderEntity2 = this.singleJumpCascaderEntity2[this.selectedSingleJumpCascaderRelation][0]
+        this.selectedSingleJumpCascaderProperty = this.singleJumpCascaderProperty[this.selectedSingleJumpCascaderEntity2][0]
       }
       else{
         this.selectedSingleJumpCascaderRelation = ""
@@ -2031,15 +2031,15 @@ export default {
         content: "",
         onOk() {
           var elemIF = document.createElement("iframe");
-          elemIF.src = url + "/entityFile";
+          elemIF.src = config.url + "/entityFile";
           elemIF.style.display = "none";
           document.body.appendChild(elemIF);
           var elemIF1 = document.createElement("iframe");
-          elemIF1.src = url+"/dictionaryFile";
+          elemIF1.src = config.url+"/dictionaryFile";
           elemIF1.style.display = "none";
           document.body.appendChild(elemIF1);
           var elemIF2 = document.createElement("iframe");
-          elemIF2.src = url+"/templateFile";
+          elemIF2.src = config.url+"/templateFile";
           elemIF2.style.display = "none";
           document.body.appendChild(elemIF2);
         },
@@ -2050,10 +2050,14 @@ export default {
       });
     },
   },
+  
   mounted() {
-    this.$nextTick(() => {
-      this.loadData();
-    });
+    axios.get('/config.json').then((response) => {
+        axios.defaults.baseURL = response.data.url
+          this.$nextTick(() => {
+            this.loadData();
+          });
+      })
   },
   components: {
     "aliases-table": AliasesTable,

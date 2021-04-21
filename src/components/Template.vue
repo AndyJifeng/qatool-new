@@ -517,6 +517,7 @@ export default {
           template: this.insertedTemplate,
           index: this.index,
         });
+
       this.saveTemplate(key,'添加')
       this.insertedTemplate = ""
       this.insertTemplateModelVision = false
@@ -546,9 +547,16 @@ export default {
     },
     loadSingleJumpOptionsData() {
       this.selectedSingleJumpCascaderEntity1 = this.singleJumpCascaderEntity1[0]
-       this.selectedSingleJumpCascaderRelation = this.singleJumpCascaderRelation[this.selectedSingleJumpCascaderEntity1][0];
+      if( typeof(this.singleJumpCascaderRelation[this.selectedSingleJumpCascaderEntity1]) !== 'undefined'){
+        this.selectedSingleJumpCascaderRelation = this.singleJumpCascaderRelation[this.selectedSingleJumpCascaderEntity1][0];
         this.selectedSingleJumpCascaderEntity2 = this.singleJumpCascaderEntity2[this.selectedSingleJumpCascaderRelation][0];
         this.selectedSingleJumpCascaderProperty = this.singleJumpCascaderProperty[this.selectedSingleJumpCascaderEntity2][0]
+      }
+      else{
+        this.selectedSingleJumpCascaderRelation = "";
+        this.selectedSingleJumpCascaderEntity2 = "";
+        this.selectedSingleJumpCascaderProperty = ""
+      }
     },
     handleSingleJumpCascaderEntity1Change(value) {
       this.selectedSingleJumpCascaderEntity1 = value;
@@ -557,7 +565,7 @@ export default {
           value
         ][0];
         this.selectedSingleJumpCascaderEntity2 = this.singleJumpCascaderEntity2[this.selectedSingleJumpCascaderRelation][0]
-        this.selectedSingleEntityCascaderProperty = this.singleJumpCascaderProperty[this.selectedSingleJumpCascaderEntity2][0]
+        this.selectedSingleJumpCascaderProperty = this.singleJumpCascaderProperty[this.selectedSingleJumpCascaderEntity2][0]
       }
       else{
         this.selectedSingleJumpCascaderRelation = ""

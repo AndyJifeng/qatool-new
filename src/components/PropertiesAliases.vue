@@ -129,13 +129,13 @@ import route from "../router/index";
 import axios from '../utils/request'
 import { SearchOutlined, PlusOutlined } from "@ant-design/icons-vue";
 import { reactive, ref } from "vue";
-import { offsetWidth,offsetHeight } from '../../dist/config'
+
 export default {
   name: "PropertiesAliases",
   data() {
     return {
       pagination: {
-        pageSize: Math.floor((offsetHeight-61)/39)-1,
+        pageSize: Math.floor((window.document.body.offsetHeight-61)/39)-1,
       },
       tableData: [],
       editingKey: "",

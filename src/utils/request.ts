@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ElLoading } from 'element-plus';
-import { url } from '../../dist/config'
 
 let loading: any;
 
@@ -44,6 +43,6 @@ axios.interceptors.response.use((response: AxiosResponse<any>) => {
     return Promise.reject(error);
 })
 
-axios.defaults.baseURL = url
+
 
 export default axios;
