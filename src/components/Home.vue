@@ -733,7 +733,7 @@ import {
 import ExportData from "./ExportData.vue";
 import QuestionTemplate from "./Template";
 import axios from "../utils/request";
-
+const config = require('../../public/config.json')
 const entityColumns = [
   {
     title: "顶点类型名",
@@ -948,7 +948,7 @@ export default {
           children: [],
         },
       ],
-      expandedKeys: ["0", "0-0", "0-1", "1"],
+      expandedKeys: ["0", "1"],
       selectedKeys: [],
       page: "",
       ifLoadMultipleJumpTemplate: false,
@@ -1599,8 +1599,7 @@ export default {
           this.selectedSingleJumpCascaderProperty = ""
           return
        }
-       console.log(this.singleJumpCascaderEntity2)
-       console.log(this.singleJumpCascaderProperty)
+ 
         this.selectedSingleJumpCascaderRelation = this.singleJumpCascaderRelation[this.selectedSingleJumpCascaderEntity1][0];
         this.selectedSingleJumpCascaderEntity2 = this.singleJumpCascaderEntity2[this.selectedSingleJumpCascaderRelation][0];
         this.selectedSingleJumpCascaderProperty = this.singleJumpCascaderProperty[this.selectedSingleJumpCascaderEntity2][0]
@@ -1905,8 +1904,8 @@ export default {
           };
           data[i] = {
             name: this.vertexlabels[i].name,
-            x: Math.random() * 400 + 300,
-            y: Math.random() * 400 + 300,
+            x: Math.random() * 250 + 400,
+            y: Math.random() * 250 + 400,
             symbolSize: Math.random() * 20 + 35,
             value: this.vertexlabels[i].name,
           };

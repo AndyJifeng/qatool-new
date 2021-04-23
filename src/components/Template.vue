@@ -109,10 +109,10 @@
       :rules="rules"
     >
       <template v-if="index === 1">
-        <a-form-item label="选择实体">
+        <a-form-item label="选择实体" name="selectedSingleEntityCascaderEntity">
           <a-select
             placeholder="Please input your entity"
-            v-model="selectedSingleEntityCascaderEntity"
+            v-model:value="selectedSingleEntityCascaderEntity"
             :value="selectedSingleEntityCascaderEntity"
             @select="handleSingleEntityCascaderEntityChange"
           >
@@ -124,7 +124,7 @@
             </a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item label="选择属性">
+        <a-form-item label="选择属性" name="property">
           <a-select
             placeholder="Please input your property"
             v-model="selectedSingleEntityCascaderProperty"
@@ -212,7 +212,7 @@
           </a-select>
         </a-form-item>
       </template>
-      <a-form-item label="选择问题类型">
+      <a-form-item label="选择问题类型" name="questionType">
         <a-select
           placeholder="Please input your question type"
           v-model="selectedQuestionType"
@@ -242,39 +242,47 @@
 import axios from "../utils/request";
 const columns = [];
 const rules = {
-  entity: [
+  selectedSingleEntityCascaderEntity: [
     {
       required: true,
+      type:'string',
       message: "Please input entity",
-      trigger: "blur",
+      trigger: "change",
     },
   ],
   property: [
     {
       required: true,
       message: "Please select property",
-      trigger: "blur",
+      trigger: "change",
     },
   ],
   entity1: [
     {
       required: true,
       message: "Please input entity1",
-      trigger: "blur",
+      trigger: "change",
+    },
+  ],
+   entity2: [
+    {
+      required: true,
+      message: "Please input entity1",
+      trigger: "change",
     },
   ],
   relation: [
     {
       required: true,
       message: "Please input relation",
-      trigger: "blur",
+      trigger: "change",
     },
   ],
   questionType: [
     {
       required: true,
       message: "Please select question type",
-      trigger: "blur",
+      trigger: "change",
     },
   ],
 };
@@ -534,6 +542,7 @@ export default {
         ][0];
     },
     handleSingleEntityCascaderEntityChange(value) {
+      console.log(this.selectedSingleEntityCascaderEntity)
       this.selectedSingleEntityCascaderEntity = value;
       this.selectedSingleEntityCascaderProperty = this.singleEntityCascaderProperty[
         value
